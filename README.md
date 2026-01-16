@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🔐 VulnLab Advanced
+# 🔐 VulnLab 
 
 ### *Multi-Tier Penetration Testing Environment*
 
