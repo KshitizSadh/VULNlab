@@ -12,19 +12,19 @@ A comprehensive, reproducible penetration testing laboratory featuring multiple 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                   VirtualBox Host-Only                  │
-│                   Network: 192.168.56.0/24              │
+│                   Network: 192.168.XXX.XXX/24              │
 └─────────────────────────────────────────────────────────┘
          │                    │                    │
     ┌────▼────┐         ┌─────▼─────┐      ┌──────▼──────┐
     │ Parrot  │         │  Ubuntu   │      │  Windows    │
     │ Attacker│◄────────┤  Target   │──────┤  Server     │
-    │  .100   │         │   .101    │      │   .102      │
+    │  .XXX   │         │   .XXX    │      │   .XXX     │
     └─────────┘         └───────────┘      └─────────────┘
 ```
 
 ### Virtual Machines
 
-#### **Parrot OS (Attacker Workstation)** - `192.168.56.100`
+#### **Parrot OS (Attacker Workstation)** - `192.168.XXX.XXX`
 - Security-focused Linux distribution
 - Pre-installed penetration testing tools
 - Anonymous surfing capabilities (AnonSurf)
@@ -32,7 +32,7 @@ A comprehensive, reproducible penetration testing laboratory featuring multiple 
 - Custom exploitation scripts
 - Network packet capture capabilities
 
-#### **Ubuntu Server (Target Host)** - `192.168.56.101`
+#### **Ubuntu Server (Target Host)** - `192.168.XXX.XXX`
 Containerized services:
 - **DVWA** (HTTP :8080) - Classic web vulnerabilities
 - **OWASP Juice Shop** (HTTP :3000) - Modern web app testing
@@ -43,7 +43,7 @@ Containerized services:
 - **Vulnerable GraphQL** (HTTP :4000)
 - **SSRF Lab** (HTTP :5000)
 
-#### **Windows Server 2019/2022 (Optional)** - `192.168.56.102`
+#### **Windows Server 2019/2022 (Optional)** - `192.168.XXX.XXX`
 - Active Directory Domain Services
 - Vulnerable SMB configurations
 - Misconfigured permissions
@@ -79,7 +79,7 @@ Containerized services:
 
 **Settings**:
 - **Network Name**: `vboxnet0` (or similar)
-- **IPv4 Address**: `192.168.56.1`
+- **IPv4 Address**: `192.168.XXX.XXX`
 - **IPv4 Network Mask**: `255.255.255.0`
 - **DHCP Server**: Disabled (we'll use static IPs)
 
@@ -110,7 +110,7 @@ Add:
 ```bash
 auto eth1
 iface eth1 inet static
-    address 192.168.56.100
+    address 192.168.XXX.XXX
     netmask 255.255.255.0
 ```
 
@@ -181,7 +181,7 @@ network:
       dhcp4: true
     enp0s8:
       addresses:
-        - 192.168.56.101/24
+        - 192.168.XXX.XXX/24
       dhcp4: false
 ```
 
@@ -394,7 +394,7 @@ sudo ufw status numbered
 #### 4.2 Configure Static IP
 ```powershell
 # PowerShell as Administrator
-New-NetIPAddress -InterfaceAlias "Ethernet 2" -IPAddress 192.168.56.102 `
+New-NetIPAddress -InterfaceAlias "Ethernet 2" -IPAddress 192.168.XXX.XXX`
     -PrefixLength 24 -DefaultGateway 192.168.56.1
 
 Set-DnsClientServerAddress -InterfaceAlias "Ethernet 2" `
@@ -467,12 +467,12 @@ Open in Parrot's browser (Firefox ESR):
 
 | Application | URL | Default Credentials |
 |-------------|-----|---------------------|
-| DVWA | http://192.168.56.101:8080 | admin / password |
-| Juice Shop | http://192.168.56.101:3000 | (create account) |
-| Mutillidae | http://192.168.56.101:8081 | (no auth needed) |
-| WebGoat | http://192.168.56.101:8082/WebGoat | (create account) |
-| bWAPP | http://192.168.56.101:8083 | bee / bug |
-| GraphQL | http://192.168.56.101:4000 | N/A |
+| DVWA | http://192.168.XXX.XXX:8080 | admin / password |
+| Juice Shop | http://192.168.XXX.XXX:3000 | (create account) |
+| Mutillidae | http://192.168.XXX.XXX:8081 | (no auth needed) |
+| WebGoat | http://192.168.XXX.XXX:8082/WebGoat | (create account) |
+| bWAPP | http://192.168.XXX.XXX:8083 | bee / bug |
+| GraphQL | http://192.168.XXX.XXX:4000 | N/A |
 
 ### DVWA Initial Setup
 1. Navigate to http://192.168.56.101:8080
@@ -484,16 +484,16 @@ Open in Parrot's browser (Firefox ESR):
 ### Active Directory Testing (from Parrot)
 ```bash
 # SMB enumeration
-crackmapexec smb 192.168.56.102 -u '' -p ''
-smbclient -L //192.168.56.102 -N
+crackmapexec smb 192.168.XXX.XXX -u '' -p ''
+smbclient -L //192.168.XXX.XXX -N
 
 # Kerberoasting
 impacket-GetUserSPNs vulnlab.local/sqlsvc:MYpassword123# \
-    -dc-ip 192.168.56.102 -request
+    -dc-ip 192.168.XXX.XXX -request
 
 # BloodHound data collection
 bloodhound-python -d vulnlab.local -u sqlsvc -p 'MYpassword123#' \
-    -ns 192.168.56.102 -c all
+    -ns 192.168.XXX.XXX -c all
 
 # Start Neo4j and BloodHound
 sudo neo4j console
@@ -555,13 +555,13 @@ deploy:
 ### 1. Multi-Stage Attack Chain
 ```bash
 # Reconnaissance
-nmap -sV 192.168.56.101 -p-
+nmap -sV 192.168.XXX.XXX -p-
 
 # Vulnerability scanning
-nikto -h http://192.168.56.101:8080
+nikto -h http://192.168.XXX.XXX:8080
 
 # Exploitation (DVWA SQL injection)
-sqlmap -u "http://192.168.56.101:8080/vulnerabilities/sqli/?id=1&Submit=Submit#" \
+sqlmap -u "http://192.168.XXX.XXX:8080/vulnerabilities/sqli/?id=1&Submit=Submit#" \
     --cookie="security=low; PHPSESSID=<session>" --dbs
 
 # Post-exploitation
