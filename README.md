@@ -1,173 +1,276 @@
-# VulnLab Advanced (Multi-Tier Vulnerable Environment)
+<div align="center">
 
-A comprehensive, reproducible penetration testing laboratory featuring multiple vulnerable web applications, network services, and Active Directory simulation. **Ubuntu** hosts containerized vulnerable applications, **Parrot OS** serves as the primary attacker workstation, and **Windows Server** provides AD/domain services—all isolated in a VirtualBox environment.
+# 🔐 VulnLab Advanced
 
-> ⚠️ **WARNING**: This lab contains intentionally vulnerable systems. Use only in isolated, controlled environments you own. Never expose to public networks.
+### *Multi-Tier Penetration Testing Environment*
+
+[![VirtualBox](https://img.shields.io/badge/VirtualBox-7.0+-blue.svg)](https://www.virtualbox.org/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04_LTS-orange.svg)](https://ubuntu.com/)
+[![Parrot OS](https://img.shields.io/badge/Parrot_OS-6.1-00d9ff.svg)](https://www.parrotsec.org/)
+[![License](https://img.shields.io/badge/License-Educational-green.svg)](#license)
+
+*A comprehensive, reproducible cybersecurity laboratory featuring vulnerable web applications, network services, and Active Directory simulation—isolated in a VirtualBox environment.*
+
+[Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [Documentation](#-documentation) • [Support](#-support)
+
+</div>
 
 ---
 
-## Architecture Overview
+## ⚡ Features
 
-### Network Topology
+<table>
+<tr>
+<td width="50%">
+
+### 🎯 **Attack Surface**
+- 8+ Vulnerable Web Applications
+- Network Service Exploitation
+- Active Directory Domain
+- GraphQL & API Testing
+- SSRF Laboratories
+
+</td>
+<td width="50%">
+
+### 🛠️ **Tooling**
+- Parrot OS Security Edition
+- Pre-configured Attack Tools
+- Anonymous Testing (AnonSurf)
+- Network Traffic Analysis
+- Automated Exploitation
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🔒 **Isolation**
+- VirtualBox Host-Only Network
+- Firewall-Hardened Targets
+- Zero Public Exposure
+- Snapshot Management
+- Safe Testing Environment
+
+</td>
+<td width="50%">
+
+### 📚 **Learning Paths**
+- OWASP Top 10 Coverage
+- CTF Challenge Support
+- Real-World Scenarios
+- AD Attack Techniques
+- Multi-Stage Campaigns
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🏗️ Architecture
+
+<div align="center">
+
 ```
-┌─────────────────────────────────────────────────────────┐
-│                   VirtualBox Host-Only                  │
-│                   Network: 192.168.XXX.XXX/24              │
-└─────────────────────────────────────────────────────────┘
-         │                    │                    │
-    ┌────▼────┐         ┌─────▼─────┐      ┌──────▼──────┐
-    │ Parrot  │         │  Ubuntu   │      │  Windows    │
-    │ Attacker│◄────────┤  Target   │──────┤  Server     │
-    │  .XXX   │         │   .XXX    │      │   .XXX     │
-    └─────────┘         └───────────┘      └─────────────┘
+╔══════════════════════════════════════════════════════════╗
+║           VirtualBox Host-Only Network                   ║
+║              Subnet: 192.xxx.xxx.0/24                     ║
+╚══════════════════════════════════════════════════════════╝
+         ┃                    ┃                    ┃
+    ┏━━━━▼━━━━┓         ┏━━━━━▼━━━━━┓      ┏━━━━━━▼━━━━━┓
+    ┃ Parrot  ┃         ┃  Ubuntu   ┃      ┃  Windows   ┃
+    ┃ Attacker┃◄━━━━━━━►┃  Target   ┃◄━━━━►┃  Server    ┃
+    ┃  .xxx   ┃         ┃   .xxx   ┃      ┃   .xxx    ┃
+    ┗━━━━━━━━━┛         ┗━━━━━━━━━━━┛      ┗━━━━━━━━━━━━┛
+       🦜                   🐋 Docker           🪟 AD DS
 ```
 
-### Virtual Machines
+</div>
 
-#### **Parrot OS (Attacker Workstation)** - `192.168.XXX.XXX`
-- Security-focused Linux distribution
-- Pre-installed penetration testing tools
-- Anonymous surfing capabilities (AnonSurf)
-- Lightweight and privacy-oriented
-- Custom exploitation scripts
-- Network packet capture capabilities
+### 🖥️ Virtual Machine Specifications
 
-#### **Ubuntu Server (Target Host)** - `192.168.XXX.XXX`
-Containerized services:
-- **DVWA** (HTTP :8080) - Classic web vulnerabilities
-- **OWASP Juice Shop** (HTTP :3000) - Modern web app testing
-- **Mutillidae II** (HTTP :8081, HTTPS :8443) - OWASP Top 10
-- **WebGoat** (HTTP :8082) - Interactive security lessons
-- **bWAPP** (HTTP :8083) - 100+ web vulnerabilities
-- **VulnHub's Metasploitable3** (SSH :2222, multiple services)
-- **Vulnerable GraphQL** (HTTP :4000)
-- **SSRF Lab** (HTTP :5000)
+#### **🦜 Parrot OS Security (Attacker Workstation)** 
+*IP: `192.168.56.100`*
 
-#### **Windows Server 2019/2022 (Optional)** - `192.168.XXX.XXX`
-- Active Directory Domain Services
-- Vulnerable SMB configurations
-- Misconfigured permissions
-- Weak service accounts
+```
+┌─────────────────────────────────────────────┐
+│ • Security-Focused Linux Distribution      │
+│ • 600+ Pre-installed Security Tools        │
+│ • Anonymous Surfing (AnonSurf)             │
+│ • Lightweight & Privacy-Oriented           │
+│ • Burp Suite, Metasploit, BloodHound       │
+└─────────────────────────────────────────────┘
+```
+
+#### **🐋 Ubuntu Server (Target Host)**
+*IP: `192.168.56.101`*
+
+<details>
+<summary><b>📦 Containerized Applications (Click to Expand)</b></summary>
+
+| Application | Port | Vulnerability Type |
+|-------------|------|-------------------|
+| **DVWA** | 8080 | Classic Web Vulns |
+| **Juice Shop** | 3000 | Modern JS/OWASP Top 10 |
+| **Mutillidae II** | 8081/8443 | OWASP Training |
+| **WebGoat** | 8082 | Interactive Lessons |
+| **bWAPP** | 8083 | 100+ Vulnerabilities |
+| **Vulnerable GraphQL** | 4000 | API Security |
+| **SSRF Lab** | 5000 | Server-Side Exploits |
+| **Metasploitable3** | 2222+ | Network Services |
+
+</details>
+
+#### **🪟 Windows Server 2019/2022 (Optional)**
+*IP: `192.168.56.102`*
+
+```
+┌─────────────────────────────────────────────┐
+│ • Active Directory Domain Services         │
+│ • Vulnerable SMB Configurations            │
+│ • Kerberoasting-Ready SPNs                 │
+│ • Weak Service Accounts                    │
+│ • BloodHound Attack Paths                  │
+└─────────────────────────────────────────────┘
+```
 
 ---
 
-## Prerequisites
+## 📋 Prerequisites
 
-### Host System Requirements
-- **Hypervisor**: Oracle VirtualBox 7.0+
-- **CPU**: 8+ threads (Intel VT-x/AMD-V enabled)
-- **RAM**: 16GB minimum, 32GB recommended
-- **Storage**: 150GB+ free space (SSD recommended)
-- **OS**: Windows 10/11, macOS, or Linux
+<table>
+<tr>
+<td width="50%">
 
-### ISO Downloads
-- [Parrot OS Security Edition](https://www.parrotsec.org/download/) (latest)
-- [Ubuntu Server 22.04 LTS](https://ubuntu.com/download/server)
-- [Windows Server 2019 Evaluation](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2019) (optional)
+### 💻 **Host Requirements**
+
+```yaml
+CPU: 8+ threads (VT-x/AMD-V)
+RAM: 16GB minimum (32GB ideal)
+Storage: 150GB+ free (SSD)
+Hypervisor: VirtualBox 7.0+
+```
+
+</td>
+<td width="50%">
+
+### 📥 **ISO Downloads**
+
+- [🦜 Parrot Security](https://www.parrotsec.org/download/)
+- [🐧 Ubuntu 22.04 LTS](https://ubuntu.com/download/server)
+- [🪟 Windows Server](https://www.microsoft.com/evalcenter) *(optional)*
+
+</td>
+</tr>
+</table>
 
 ---
 
-## Step-by-Step Setup
+## 🚀 Quick Start
 
-### Phase 1: Network Configuration
+### **Phase 1️⃣: Network Setup**
 
-#### 1.1 Create Host-Only Network
+<details>
+<summary><b>Configure VirtualBox Host-Only Network</b></summary>
+
 ```bash
-# VirtualBox → Tools → Network Manager → Host-only Networks
-# Click "Create" and configure:
+# Open VirtualBox → Tools → Network Manager
+# Create new Host-Only Network with these settings:
+
+┌────────────────────────────────────┐
+│ Network Name: vboxnet0             │
+│ IPv4 Address: 192.168.56.1         │
+│ Subnet Mask:  255.255.255.0        │
+│ DHCP Server:  Disabled             │
+└────────────────────────────────────┘
 ```
 
-**Settings**:
-- **Network Name**: `vboxnet0` (or similar)
-- **IPv4 Address**: `192.168.XXX.XXX`
-- **IPv4 Network Mask**: `255.255.255.0`
-- **DHCP Server**: Disabled (we'll use static IPs)
+**VM Network Adapters** (All VMs):
+- **Adapter 1**: NAT *(Internet access)*
+- **Adapter 2**: Host-Only Adapter *(Lab traffic)*
 
-#### 1.2 VM Network Adapters
-
-For **all three VMs**, configure:
-
-| Adapter | Type | Purpose | Network |
-|---------|------|---------|---------|
-| Adapter 1 | NAT | Internet access (updates) | Default NAT |
-| Adapter 2 | Host-Only | Lab isolation | vboxnet0 |
+</details>
 
 ---
 
-### Phase 2: Parrot OS Setup
+### **Phase 2️⃣: Parrot OS Setup**
 
-#### 2.1 Install Parrot OS
-1. Create VM: 4GB RAM, 2 CPU cores, 80GB disk
-2. Install from ISO (Security Edition recommended)
-3. Username: `parrot`, Password: `parrot` (change in production)
+<details>
+<summary><b>Installation & Configuration</b></summary>
 
-#### 2.2 Configure Static IP
+#### **Step 1: Create & Install VM**
+```yaml
+Name: Parrot-Attacker
+RAM: 4GB
+CPUs: 2
+Disk: 80GB
+ISO: Parrot Security Edition
+```
+
+#### **Step 2: Configure Static IP**
 ```bash
 sudo nano /etc/network/interfaces
 ```
 
-Add:
+Add configuration:
 ```bash
 auto eth1
 iface eth1 inet static
-    address 192.168.XXX.XXX
+    address 192.168.56.100
     netmask 255.255.255.0
 ```
 
-Apply changes:
 ```bash
 sudo systemctl restart networking
-ip a show eth1
+ip a show eth1  # Verify
 ```
 
-#### 2.3 Update System & Install Additional Tools
+#### **Step 3: System Update**
 ```bash
 # Update Parrot repositories
 sudo parrot-upgrade
 
-# Install additional tools not in default Parrot
+# Install additional tools
 sudo apt update && sudo apt install -y \
     zaproxy seclists feroxbuster chisel \
     bloodhound neo4j crackmapexec impacket-scripts \
     powershell-empire starkiller enum4linux-ng \
     kerbrute mitm6 responder
 
-# Install additional Python tools
+# Python security tools
 pip3 install --user pypykatz lsassy
 ```
 
-#### 2.4 Configure Burp Suite
+#### **Step 4: Configure Tools**
 ```bash
-# Launch Burp (already installed in Parrot)
+# Launch Burp Suite
 burpsuite &
 
-# Import CA certificate to browser:
-# Burp → Proxy → Options → Import/Export CA Certificate
-```
-
-#### 2.5 Enable AnonSurf (Optional - for anonymity)
-```bash
-# AnonSurf comes pre-installed in Parrot Security
-# Start anonymous mode
+# Enable AnonSurf (optional - for anonymity)
 sudo anonsurf start
-
-# Check status
 sudo anonsurf status
-
-# Stop when done testing
-sudo anonsurf stop
 ```
+
+</details>
 
 ---
 
-### Phase 3: Ubuntu Target Setup
+### **Phase 3️⃣: Ubuntu Target Setup**
 
-#### 3.1 Install Ubuntu Server
-1. Create VM: 4GB RAM, 2 CPU cores, 80GB disk
-2. Install Ubuntu Server (minimal installation)
-3. Username: `vulnadmin`, Password: `VulnLab2024!`
+<details>
+<summary><b>Docker Environment Deployment</b></summary>
 
-#### 3.2 Configure Static IP
+#### **Step 1: VM Installation**
+```yaml
+Name: Ubuntu-Target
+RAM: 4GB
+CPUs: 2
+Disk: 80GB
+ISO: Ubuntu Server 22.04
+```
+
+#### **Step 2: Network Configuration**
 ```bash
 sudo nano /etc/netplan/01-netcfg.yaml
 ```
@@ -181,67 +284,59 @@ network:
       dhcp4: true
     enp0s8:
       addresses:
-        - 192.168.XXX.XXX/24
+        - 192.168.56.101/24
       dhcp4: false
 ```
 
-Apply:
 ```bash
 sudo netplan apply
-ip a show enp0s8
 ```
 
-#### 3.3 Install Docker & Docker Compose
+#### **Step 3: Docker Installation**
 ```bash
 # Remove old versions
 sudo apt remove docker docker-engine docker.io containerd runc
 
 # Install prerequisites
 sudo apt update
-sudo apt install -y ca-certificates curl gnupg lsb-release
+sudo apt install -y ca-certificates curl gnupg
 
-# Add Docker's official GPG key
+# Add Docker GPG key
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
     sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-# Set up repository
+# Setup repository
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
   https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-# Install Docker Engine
+# Install Docker
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io \
     docker-buildx-plugin docker-compose-plugin
 
-# Enable and start
+# Configure
 sudo systemctl enable docker
-sudo systemctl start docker
-
-# Add user to docker group
 sudo usermod -aG docker $USER
 newgrp docker
-
-# Verify
-docker --version
-docker compose version
 ```
 
-#### 3.4 Deploy Vulnerable Applications
+#### **Step 4: Deploy Applications**
 ```bash
 mkdir -p ~/vulnlab && cd ~/vulnlab
 nano docker-compose.yml
 ```
 
-**Enhanced `docker-compose.yml`**:
+<details>
+<summary><b>📄 docker-compose.yml (Click to view)</b></summary>
+
 ```yaml
 version: '3.8'
 
 services:
-  # Classic DVWA
   dvwa:
     image: vulnerables/web-dvwa
     container_name: dvwa
@@ -256,7 +351,6 @@ services:
     networks:
       - vulnlab
 
-  # Modern JS vulnerabilities
   juiceshop:
     image: bkimminich/juice-shop
     container_name: juiceshop
@@ -266,7 +360,6 @@ services:
     networks:
       - vulnlab
 
-  # OWASP Top 10
   mutillidae:
     image: bltsec/mutillidae-docker
     container_name: mutillidae
@@ -277,7 +370,6 @@ services:
     networks:
       - vulnlab
 
-  # Interactive lessons
   webgoat:
     image: webgoat/webgoat
     container_name: webgoat
@@ -290,7 +382,6 @@ services:
     networks:
       - vulnlab
 
-  # 100+ vulnerabilities
   bwapp:
     image: raesene/bwapp
     container_name: bwapp
@@ -300,7 +391,6 @@ services:
     networks:
       - vulnlab
 
-  # GraphQL vulnerabilities
   vulnerable-graphql:
     image: carvesystems/vulnerable-graphql
     container_name: vulnerable-graphql
@@ -310,7 +400,6 @@ services:
     networks:
       - vulnlab
 
-  # SSRF practice
   ssrf-lab:
     image: jfloff/alpine-python:3.8
     container_name: ssrf-lab
@@ -321,7 +410,6 @@ services:
     networks:
       - vulnlab
 
-  # Metasploitable3 (Ubuntu)
   metasploitable3:
     image: tleemcjr/metasploitable3
     container_name: metasploitable3
@@ -343,80 +431,90 @@ networks:
     driver: bridge
 ```
 
-Start the lab:
+</details>
+
 ```bash
+# Start the lab
 docker compose up -d
+
+# Verify deployment
 docker compose ps
-docker compose logs -f
 ```
 
-#### 3.5 Configure Firewall (UFW)
+#### **Step 5: Firewall Configuration**
 ```bash
-# Reset UFW
+# Reset firewall
 sudo ufw --force reset
 
-# Default policies
+# Set defaults
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 
-# Allow from Kali only
-KALI_IP="192.168.56.100"
+# Allow Parrot access only
+PARROT_IP="192.168.56.100"
 
-sudo ufw allow from $KALI_IP to any port 22 proto tcp comment 'SSH from Kali'
-sudo ufw allow from $KALI_IP to any port 8080 proto tcp comment 'DVWA'
-sudo ufw allow from $KALI_IP to any port 3000 proto tcp comment 'Juice Shop'
-sudo ufw allow from $KALI_IP to any port 8081 proto tcp comment 'Mutillidae HTTP'
-sudo ufw allow from $KALI_IP to any port 8443 proto tcp comment 'Mutillidae HTTPS'
-sudo ufw allow from $KALI_IP to any port 8082 proto tcp comment 'WebGoat'
-sudo ufw allow from $KALI_IP to any port 8083 proto tcp comment 'bWAPP'
-sudo ufw allow from $KALI_IP to any port 4000 proto tcp comment 'GraphQL'
-sudo ufw allow from $KALI_IP to any port 5000 proto tcp comment 'SSRF Lab'
-sudo ufw allow from $KALI_IP to any port 2222 proto tcp comment 'Metasploitable SSH'
-sudo ufw allow from $KALI_IP to any port 21 proto tcp comment 'FTP'
-sudo ufw allow from $KALI_IP to any port 445 proto tcp comment 'SMB'
-sudo ufw allow from $KALI_IP to any port 3306 proto tcp comment 'MySQL'
-sudo ufw allow from $KALI_IP to any port 5432 proto tcp comment 'PostgreSQL'
+sudo ufw allow from $PARROT_IP to any port 22 proto tcp comment 'SSH'
+sudo ufw allow from $PARROT_IP to any port 8080 proto tcp comment 'DVWA'
+sudo ufw allow from $PARROT_IP to any port 3000 proto tcp comment 'Juice Shop'
+sudo ufw allow from $PARROT_IP to any port 8081 proto tcp comment 'Mutillidae HTTP'
+sudo ufw allow from $PARROT_IP to any port 8443 proto tcp comment 'Mutillidae HTTPS'
+sudo ufw allow from $PARROT_IP to any port 8082 proto tcp comment 'WebGoat'
+sudo ufw allow from $PARROT_IP to any port 8083 proto tcp comment 'bWAPP'
+sudo ufw allow from $PARROT_IP to any port 4000 proto tcp comment 'GraphQL'
+sudo ufw allow from $PARROT_IP to any port 5000 proto tcp comment 'SSRF Lab'
+sudo ufw allow from $PARROT_IP to any port 2222 proto tcp comment 'Metasploitable'
+sudo ufw allow from $PARROT_IP to any port 21 proto tcp comment 'FTP'
+sudo ufw allow from $PARROT_IP to any port 445 proto tcp comment 'SMB'
+sudo ufw allow from $PARROT_IP to any port 3306 proto tcp comment 'MySQL'
+sudo ufw allow from $PARROT_IP to any port 5432 proto tcp comment 'PostgreSQL'
 
-# Enable firewall
+# Enable
 sudo ufw enable
 sudo ufw status numbered
 ```
 
+</details>
+
 ---
 
-### Phase 4: Windows Server AD Setup (Optional)
+### **Phase 4️⃣: Windows Server AD (Optional)**
 
-#### 4.1 Install Windows Server
-1. Create VM: 4GB RAM, 2 CPU cores, 80GB disk
-2. Install Windows Server 2019/2022
-3. Set Administrator password: `P@ssw0rd123!`
+<details>
+<summary><b>Active Directory Configuration</b></summary>
 
-#### 4.2 Configure Static IP
+#### **Step 1: Installation**
+```yaml
+Name: Windows-DC
+RAM: 4GB
+CPUs: 2
+Disk: 80GB
+ISO: Windows Server 2019/2022
+```
+
+#### **Step 2: Network Setup**
 ```powershell
-# PowerShell as Administrator
-New-NetIPAddress -InterfaceAlias "Ethernet 2" -IPAddress 192.168.XXX.XXX`
-    -PrefixLength 24 -DefaultGateway 192.168.56.1
+# PowerShell (Administrator)
+New-NetIPAddress -InterfaceAlias "Ethernet 2" `
+    -IPAddress 192.168.56.102 `
+    -PrefixLength 24 `
+    -DefaultGateway 192.168.56.1
 
 Set-DnsClientServerAddress -InterfaceAlias "Ethernet 2" `
     -ServerAddresses 192.168.56.102
 ```
 
-#### 4.3 Install Active Directory
+#### **Step 3: Install AD DS**
 ```powershell
-# Install AD DS role
 Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
 
-# Promote to domain controller
 Install-ADDSForest `
     -DomainName "vulnlab.local" `
     -DomainNetbiosName "VULNLAB" `
     -SafeModeAdministratorPassword (ConvertTo-SecureString "P@ssw0rd123!" -AsPlainText -Force) `
     -Force
-
-# Reboot when prompted
 ```
 
-#### 4.4 Create Vulnerable AD Environment
+#### **Step 4: Create Vulnerable Environment**
 ```powershell
 # Create OUs
 New-ADOrganizationalUnit -Name "VulnLab Users" -Path "DC=vulnlab,DC=local"
@@ -435,401 +533,609 @@ New-ADUser -Name "Backup Admin" -SamAccountName "backupadmin" `
     -PasswordNeverExpires $true -Enabled $true `
     -Path "OU=VulnLab Users,DC=vulnlab,DC=local"
 
-# Add to privileged groups
+# Privilege escalation setup
 Add-ADGroupMember -Identity "Backup Operators" -Members backupadmin
-
-# Set SPN for Kerberoasting
 setspn -A MSSQLSvc/sqlserver.vulnlab.local:1433 vulnlab\sqlsvc
 
-# Create SMB share with weak permissions
+# Vulnerable SMB share
 New-Item -Path "C:\Shares\Public" -ItemType Directory
 New-SmbShare -Name "Public" -Path "C:\Shares\Public" -FullAccess "Everyone"
 ```
 
+</details>
+
 ---
 
-## Testing & Usage
+## 🎯 Testing & Exploitation
 
-### Initial Connectivity Tests (from Parrot)
+### **Initial Reconnaissance**
+
 ```bash
-# Ping sweep
+# From Parrot OS terminal
+
+# 1. Network discovery
 nmap -sn 192.168.56.0/24
 
-# Port scan Ubuntu target
-nmap -sV -sC -p- 192.168.56.101 -oA ubuntu_scan
+# 2. Service enumeration
+nmap -sV -sC -p- 192.168.56.101 -oA ubuntu_full_scan
 
-# Port scan Windows target (if deployed)
-nmap -sV -sC -p- 192.168.56.102 -oA windows_scan
+# 3. Windows enumeration (if deployed)
+nmap -sV -sC -p- 192.168.56.102 -oA windows_full_scan
 ```
 
-### Web Application Access
-Open in Parrot's browser (Firefox ESR):
+### **🌐 Web Application Access**
 
-| Application | URL | Default Credentials |
-|-------------|-----|---------------------|
-| DVWA | http://192.168.XXX.XXX:8080 | admin / password |
-| Juice Shop | http://192.168.XXX.XXX:3000 | (create account) |
-| Mutillidae | http://192.168.XXX.XXX:8081 | (no auth needed) |
-| WebGoat | http://192.168.XXX.XXX:8082/WebGoat | (create account) |
-| bWAPP | http://192.168.XXX.XXX:8083 | bee / bug |
-| GraphQL | http://192.168.XXX.XXX:4000 | N/A |
+<table>
+<tr>
+<th>Application</th>
+<th>URL</th>
+<th>Credentials</th>
+<th>Focus Area</th>
+</tr>
+<tr>
+<td>🔴 DVWA</td>
+<td><code>http://192.168.xxx.xxx:8080</code></td>
+<td><code>admin/password</code></td>
+<td>Classic vulnerabilities</td>
+</tr>
+<tr>
+<td>🧃 Juice Shop</td>
+<td><code>http://192.168.xxx.xxx:3000</code></td>
+<td><i>Create account</i></td>
+<td>Modern web apps</td>
+</tr>
+<tr>
+<td>🐛 Mutillidae</td>
+<td><code>http://192.168.xxx.xxx:8081</code></td>
+<td><i>No auth</i></td>
+<td>OWASP Top 10</td>
+</tr>
+<tr>
+<td>🐐 WebGoat</td>
+<td><code>http://192.168.xxx.xxx:8082/WebGoat</code></td>
+<td><i>Create account</i></td>
+<td>Interactive lessons</td>
+</tr>
+<tr>
+<td>🐝 bWAPP</td>
+<td><code>http://192.168.xxx.xxx:8083</code></td>
+<td><code>bee/bug</code></td>
+<td>100+ vulnerabilities</td>
+</tr>
+<tr>
+<td>📊 GraphQL</td>
+<td><code>http://192.168.xxx.xxx:4000</code></td>
+<td><i>N/A</i></td>
+<td>API security</td>
+</tr>
+</table>
 
-### DVWA Initial Setup
-1. Navigate to http://192.168.56.101:8080
-2. Login: `admin` / `password`
-3. Click **Setup/Reset Database**
-4. Re-login after database creation
-5. Set security level: DVWA Security → Low/Medium/High
+### **🎓 DVWA Quick Start**
 
-### Active Directory Testing (from Parrot)
+```bash
+# 1. Access DVWA
+firefox http://192.168.xxx.xxx:8080 &
+
+# 2. Login: admin / password
+
+# 3. Initialize database
+#    Click: "Setup / Reset Database"
+
+# 4. Re-login after database creation
+
+# 5. Set security level
+#    DVWA Security → Select: Low/Medium/High/Impossible
+```
+
+### **🏴‍☠️ Active Directory Exploitation**
+
 ```bash
 # SMB enumeration
-crackmapexec smb 192.168.XXX.XXX -u '' -p ''
-smbclient -L //192.168.XXX.XXX -N
+crackmapexec smb 192.168.xxx.xxx -u '' -p ''
+enum4linux-ng 192.168.xxx.xxx
 
-# Kerberoasting
+# Kerberoasting attack
 impacket-GetUserSPNs vulnlab.local/sqlsvc:MYpassword123# \
-    -dc-ip 192.168.XXX.XXX -request
+    -dc-ip 192.168.xxx.xxx -request -outputfile kerberoast_hashes.txt
 
-# BloodHound data collection
-bloodhound-python -d vulnlab.local -u sqlsvc -p 'MYpassword123#' \
-    -ns 192.168.XXX.XXX -c all
+# Crack the hash
+hashcat -m 13100 kerberoast_hashes.txt /usr/share/wordlists/rockyou.txt
 
-# Start Neo4j and BloodHound
+# BloodHound enumeration
+bloodhound-python -d vulnlab.local \
+    -u sqlsvc -p 'MYpassword123#' \
+    -ns 192.168.xxx.xxx -c all
+
+# Start BloodHound
 sudo neo4j console
-# In new terminal:
-bloodhound
+bloodhound  # In new terminal
 ```
 
 ---
 
-## Lab Management
+## 🔧 Lab Management
 
-### Start All Services
+### **Container Operations**
+
 ```bash
-# Ubuntu
+# Start all services
 cd ~/vulnlab
 docker compose up -d
 
-# Check status
+# View status
 docker compose ps
-```
 
-### Stop All Services
-```bash
+# Stop services
 docker compose down
-```
 
-### Complete Reset (including data)
-```bash
+# Complete reset (including volumes)
 docker compose down -v
-docker system prune -af
-```
 
-### View Logs
-```bash
-# All services
+# View logs
 docker compose logs -f
+docker compose logs -f dvwa  # Specific service
 
-# Specific service
-docker compose logs -f dvwa
+# Restart single service
+docker compose restart juiceshop
 ```
 
-### Resource Monitoring
+### **VM Snapshot Management**
+
 ```bash
-# Ubuntu
+# Create clean snapshot
+VBoxManage snapshot "Ubuntu-Target" take "Clean-State" --description "Initial deployment"
+
+# List snapshots
+VBoxManage snapshot "Ubuntu-Target" list
+
+# Restore snapshot
+VBoxManage snapshot "Ubuntu-Target" restore "Clean-State"
+
+# Delete snapshot
+VBoxManage snapshot "Ubuntu-Target" delete "Clean-State"
+```
+
+### **Resource Monitoring**
+
+```bash
+# Docker resource usage
 docker stats
 
-# Container resource limits (add to docker-compose.yml)
-deploy:
-  resources:
-    limits:
-      cpus: '1'
-      memory: 512M
+# System resources
+htop
+
+# Network connections
+sudo netstat -tunlp
 ```
 
 ---
 
-## Advanced Scenarios
+## 🎭 Advanced Attack Scenarios
 
-### 1. Multi-Stage Attack Chain
+### **Scenario 1: Web Application Penetration**
+
 ```bash
-# Reconnaissance
-nmap -sV 192.168.XXX.XXX -p-
+# 1. Reconnaissance
+nikto -h http://192.168.56.101:8080
+whatweb http://192.168.56.101:8080
 
-# Vulnerability scanning
-nikto -h http://192.168.XXX.XXX:8080
+# 2. Directory brute-forcing
+feroxbuster -u http://192.168.56.101:8080 -w /usr/share/seclists/Discovery/Web-Content/common.txt
 
-# Exploitation (DVWA SQL injection)
-sqlmap -u "http://192.168.XXX.XXX:8080/vulnerabilities/sqli/?id=1&Submit=Submit#" \
-    --cookie="security=low; PHPSESSID=<session>" --dbs
+# 3. SQL injection testing
+sqlmap -u "http://192.168.56.101:8080/vulnerabilities/sqli/?id=1&Submit=Submit" \
+    --cookie="security=low; PHPSESSID=<your-session>" \
+    --dbs --batch
 
-# Post-exploitation
-# Establish reverse shell, pivot to Windows AD
+# 4. XSS exploitation
+# Manual testing in browser + Burp Suite intercept
 ```
 
-### 2. Capture-the-Flag Setup
-Create flag files in containers:
-```bash
-# Ubuntu host
-docker exec dvwa sh -c "echo 'FLAG{dvwa_root_access}' > /var/www/html/flag.txt"
-docker exec juiceshop sh -c "echo 'FLAG{juice_admin_panel}' > /juice-shop/flag.txt"
+### **Scenario 2: Multi-Stage Attack Chain**
+
+```mermaid
+graph LR
+    A[Network Scan] --> B[Service Enumeration]
+    B --> C[Vulnerability Identification]
+    C --> D[Web App Exploitation]
+    D --> E[Reverse Shell]
+    E --> F[Privilege Escalation]
+    F --> G[Pivot to AD]
+    G --> H[Domain Compromise]
 ```
 
-### 3. Custom Vulnerable Application
-Add to `docker-compose.yml`:
-```yaml
-  custom-app:
-    build: ./custom-vuln-app
-    ports:
-      - "9000:9000"
-    networks:
-      - vulnlab
+### **Scenario 3: Capture-the-Flag Setup**
+
+```bash
+# On Ubuntu target - Create hidden flags
+docker exec dvwa sh -c "echo 'FLAG{dvwa_database_pwned}' > /var/www/html/.flag1.txt"
+docker exec juiceshop sh -c "echo 'FLAG{juice_admin_access}' > /juice-shop/.flag2.txt"
+docker exec mutillidae sh -c "echo 'FLAG{mutillidae_rce_achieved}' > /var/www/html/.flag3.txt"
+
+# Participants must find and retrieve flags through exploitation
 ```
 
 ---
 
-## Troubleshooting
+## ⚠️ Security & Safety
 
-### Port Conflicts
+### **🚨 Critical Safety Measures**
+
+> **WARNING**: These systems are intentionally vulnerable. Improper use can expose you to security risks.
+
+```
+┌─────────────────────────────────────────────────────┐
+│  ✓ ONLY use Host-Only networking                   │
+│  ✓ NEVER expose to public internet                 │
+│  ✓ Disable NAT adapter after initial setup         │
+│  ✓ Use strong host machine security                │
+│  ✓ Regularly snapshot clean states                 │
+│  ✓ Test only systems you own/authorize             │
+└─────────────────────────────────────────────────────┘
+```
+
+### **Legal Compliance**
+
+- ✅ Only test systems you own or have written permission to test
+- ✅ Follow responsible disclosure for any real vulnerabilities found
+- ✅ Comply with local cybersecurity laws and regulations
+- ✅ Use for educational and authorized testing purposes only
+- ❌ Never use techniques learned here on unauthorized systems
+
+### **Backup Strategy**
+
+```bash
+# 1. Export VMs
+VBoxManage export Parrot-Attacker -o parrot-backup.ova
+VBoxManage export Ubuntu-Target -o ubuntu-backup.ova
+
+# 2. Backup configurations
+cd ~/vulnlab
+tar -czf vulnlab-config-$(date +%Y%m%d).tar.gz docker-compose.yml
+
+# 3. Store backups securely
+# Recommend encrypted external storage
+```
+
+---
+
+## 🐛 Troubleshooting
+
+<details>
+<summary><b>🔴 Port Conflicts</b></summary>
+
 ```bash
 # Check what's using a port
 sudo lsof -i :8080
+sudo netstat -tunlp | grep 8080
 
-# Change docker-compose.yml port mapping
-# "8084:80" instead of "8080:80"
+# Solution: Change port mapping in docker-compose.yml
+# Example: "8084:80" instead of "8080:80"
+
+docker compose down
+docker compose up -d
 ```
 
-### Docker Container Won't Start
-```bash
-# Check logs
-docker compose logs <service_name>
+</details>
 
-# Restart individual service
-docker compose restart <service_name>
+<details>
+<summary><b>🔴 Container Won't Start</b></summary>
+
+```bash
+# View detailed logs
+docker compose logs <service_name>
 
 # Force recreate
 docker compose up -d --force-recreate <service_name>
+
+# Complete restart
+docker compose down -v
+docker compose up -d
 ```
 
-### Network Connectivity Issues
+</details>
+
+<details>
+<summary><b>🔴 Network Connectivity Issues</b></summary>
+
 ```bash
-# Verify VirtualBox network
+# Verify host-only network
 VBoxManage list hostonlyifs
 
-# Check Ubuntu routing
+# Check routing
 ip route show
 
-# Verify UFW isn't blocking
+# Test connectivity
+ping -c 3 192.168.56.101
+
+# Verify firewall
 sudo ufw status verbose
 sudo ufw allow from 192.168.56.100
 ```
 
-### DVWA Database Connection Errors
+</details>
+
+<details>
+<summary><b>🔴 DVWA Database Errors</b></summary>
+
 ```bash
-# Exec into container
+# Access container
 docker exec -it dvwa bash
 
-# Check MySQL
+# Test MySQL connection
 mysql -u root -pdvwa -e "SHOW DATABASES;"
 
 # Reset DVWA
 docker compose restart dvwa
+
+# Complete rebuild
+docker compose down
+docker compose up -d dvwa
 ```
 
-### Windows AD Not Accessible
+</details>
+
+<details>
+<summary><b>🔴 Windows AD Not Accessible</b></summary>
+
 ```powershell
-# Check Windows Firewall
+# Check firewall status
 Get-NetFirewallProfile | Select Name, Enabled
 
-# Temporarily disable (testing only)
+# Temporarily disable (testing only!)
 Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
 
-# Check DNS
+# Verify DNS
 nslookup vulnlab.local
+
+# Test from Parrot
+ping 192.168.56.102
+crackmapexec smb 192.168.56.102
+```
+
+</details>
+
+---
+
+## 📚 Learning Paths
+
+### **🔰 Beginner Track**
+
+```
+Week 1-2: Web Fundamentals
+├── DVWA (Low Security)
+│   ├── SQL Injection
+│   ├── XSS (Reflected/Stored)
+│   ├── Command Injection
+│   └── File Upload
+│
+Week 3-4: Modern Applications
+├── OWASP Juice Shop
+│   ├── Broken Authentication
+│   ├── Sensitive Data Exposure
+│   ├── XXE Injection
+│   └── CSRF
+│
+Week 5-6: Network Services
+└── Metasploitable3
+    ├── FTP Enumeration
+    ├── SMB Exploitation
+    └── MySQL Attacks
+```
+
+### **⚡ Intermediate Track**
+
+```
+Month 1: Advanced Web
+├── WebGoat Interactive Lessons
+├── Mutillidae II (Medium Security)
+├── bWAPP Challenges
+└── GraphQL API Testing
+
+Month 2: Active Directory
+├── SMB Enumeration
+├── Kerberoasting
+├── BloodHound Analysis
+└── Lateral Movement
+```
+
+### **🔥 Advanced Track**
+
+```
+Multi-Stage Attack Campaigns
+├── Initial Access (Web App Exploit)
+├── Establish Persistence
+├── Privilege Escalation
+├── Network Pivoting
+├── AD Enumeration
+├── Domain Admin Compromise
+└── Complete Infrastructure Control
 ```
 
 ---
 
-## Security Best Practices
+## 🎓 Recommended Resources
 
-### ⚠️ Critical Safety Measures
+### **📖 Documentation**
+- [OWASP Testing Guide](https://owasp.org/www-project-web-security-testing-guide/)
+- [DVWA Documentation](https://github.com/digininja/DVWA)
+- [Juice Shop Guide](https://pwning.owasp-juice.shop/)
+- [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
 
-1. **Network Isolation**
-   - Never bridge VMs to physical network
-   - Use host-only networking exclusively for lab traffic
-   - Disable internet on target VMs after setup
+### **🎥 Video Courses**
+- HackTheBox Academy
+- TryHackMe Learning Paths
+- PentesterLab Exercises
+- Offensive Security Training
 
-2. **Snapshot Management**
-   ```bash
-   # Take clean snapshot before testing
-   VBoxManage snapshot "Ubuntu-Target" take "Clean-State"
-   
-   # Restore after tests
-   VBoxManage snapshot "Ubuntu-Target" restore "Clean-State"
-   ```
-
-3. **Regular Updates** (Kali only)
-   ```bash
-   sudo apt update && sudo apt full-upgrade -y
-   ```
-
-4. **Password Hygiene**
-   - Change all default passwords
-   - Use password manager for tracking
-   - Never use these credentials elsewhere
-
-5. **Legal Compliance**
-   - Only test systems you own
-   - Obtain written authorization for any testing
-   - Follow responsible disclosure practices
+### **📝 Certification Prep**
+- **OSCP**: Focus on manual exploitation
+- **CEH**: Cover all OWASP Top 10
+- **eWPT**: WebGoat + Juice Shop
+- **CRTP**: Active Directory lab
 
 ---
 
-## Backup & Restore
+## 🔄 Updates & Maintenance
 
-### Export VMs
+### **System Updates**
+
 ```bash
-# VirtualBox → File → Export Appliance
-# Select all VMs, choose .ova format
+# Parrot OS
+sudo parrot-upgrade
+
+# Ubuntu Target
+sudo apt update && sudo apt upgrade -y
+
+# Docker Images
+docker compose pull
+docker compose up -d
 ```
 
-### Clone Configuration
-```bash
-# Ubuntu
-cd ~/vulnlab
-tar -czf vulnlab-backup.tar.gz docker-compose.yml
+### **Adding New Targets**
 
-# Kali
-# Backup custom scripts and configs
-tar -czf kali-configs.tar.gz ~/.bashrc ~/.zshrc ~/scripts
-```
-
----
-
-## Performance Optimization
-
-### Reduce Resource Usage
 ```yaml
-# docker-compose.yml adjustments
+# Add to docker-compose.yml
+  new-vuln-app:
+    image: vulnerableapp/latest
+    ports:
+      - "9000:80"
+    networks:
+      - vulnlab
+    restart: unless-stopped
+```
+
+### **Performance Tuning**
+
+```yaml
+# Resource limits in docker-compose.yml
 services:
   dvwa:
     deploy:
       resources:
         limits:
-          memory: 256M
-    environment:
-      - PHP_MEMORY_LIMIT=128M
+          cpus: '1'
+          memory: 512M
 ```
 
-### VirtualBox Tweaks
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how:
+
 ```bash
-# Increase video memory
-VBoxManage modifyvm "Ubuntu-Target" --vram 128
+# 1. Fork the repository
+git clone https://github.com/yourusername/vulnlab-advanced.git
 
-# Enable nested virtualization
-VBoxManage modifyvm "Parrot-Attacker" --nested-hw-virt on
+# 2. Create feature branch
+git checkout -b feature/amazing-addition
 
-# Allocate more CPUs
-VBoxManage modifyvm "Ubuntu-Target" --cpus 4
+# 3. Make changes and test thoroughly
+
+# 4. Commit with descriptive message
+git commit -m "Add: New vulnerable application XYZ"
+
+# 5. Push and create pull request
+git push origin feature/amazing-addition
 ```
 
+### **Contribution Guidelines**
+- ✅ Test all changes in isolated environment
+- ✅ Document new features thoroughly
+- ✅ Follow existing code style
+- ✅ Include security warnings where needed
+- ✅ Add to troubleshooting section if relevant
+
 ---
 
-## Extending the Lab
+## 📜 License
 
-### Add More Targets
-- **OWASP NodeGoat**: Node.js vulnerabilities
-- **VulnHub VMs**: Import pre-built vulnerable systems
-- **HackTheBox retired machines**: Download .ova files
-- **Custom Windows 10**: Simulate workstation attacks
+This configuration is provided **as-is for educational purposes only**.
 
-### Monitoring & Logging
-```yaml
-# Add ELK stack for centralized logging
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
-    ports:
-      - "9200:9200"
-      
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.11.0
-    ports:
-      - "5601:5601"
+### **Component Licenses**
+
+| Component | License | Link |
+|-----------|---------|------|
+| DVWA | GPL-3.0 | [Link](https://github.com/digininja/DVWA) |
+| OWASP Juice Shop | MIT | [Link](https://github.com/juice-shop/juice-shop) |
+| Mutillidae II | GPL-3.0 | [Link](https://github.com/webpwnized/mutillidae) |
+| WebGoat | LGPL-2.1 | [Link](https://github.com/WebGoat/WebGoat) |
+| bWAPP | CC BY-NC-ND | [Link](http://www.itsecgames.com/) |
+
+---
+
+## 🙏 Acknowledgments
+
+<div align="center">
+
+**Special Thanks To:**
+
+🔐 **OWASP Foundation** • 🦜 **Parrot Security Team** • 🛡️ **Offensive Security Community**
+
+🐋 **Docker Community** • 💻 **VulnHub** • 🎯 **HackTheBox**
+
+🌐 **Global Security Researchers** • 📚 **Educators Worldwide**
+
+</div>
+
+---
+
+## 💬 Support & Community
+
+<table>
+<tr>
+<td align="center">
+
+### 📧 **Get Help**
+
+- Check [Troubleshooting](#-troubleshooting)
+- Review [Documentation](#-documentation)
+- Search existing issues
+- Create detailed bug report
+
+</td>
+<td align="center">
+
+### 🐛 **Report Issues**
+
+```bash
+# Include in bug reports:
+- VirtualBox version
+- OS versions (all VMs)
+- Error messages
+- docker compose logs
 ```
 
-### CTF Platform Integration
-```yaml
-  ctfd:
-    image: ctfd/ctfd
-    ports:
-      - "8000:8000"
-    environment:
-      - DATABASE_URL=mysql+pymysql://ctfd:ctfd@db/ctfd
-```
+</td>
+</tr>
+</table>
 
 ---
 
-## Learning Resources
+<div align="center">
 
-### Recommended Path
-1. **Web Fundamentals**: Start with DVWA (Low security)
-2. **Modern Apps**: Progress to Juice Shop
-3. **GraphQL/APIs**: Test vulnerable-graphql
-4. **Network Services**: Exploit Metasploitable3
-5. **Active Directory**: Practice AD attack paths
+## 📊 Project Stats
 
-### Documentation Links
-- [DVWA Guide](https://github.com/digininja/DVWA)
-- [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/)
-- [WebGoat Lessons](https://owasp.org/www-project-webgoat/)
-- [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
+![GitHub stars](https://img.shields.io/github/stars/yourusername/vulnlab-advanced?style=social)
+![GitHub forks](https://img.shields.io/github/forks/yourusername/vulnlab-advanced?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/yourusername/vulnlab-advanced?style=social)
 
 ---
 
-## Contributing
+### 🎯 Quick Links
 
-To enhance this lab:
-1. Fork and create feature branch
-2. Test thoroughly in isolated environment
-3. Document all changes
-4. Submit pull request with detailed description
+[Installation](#-quick-start) • [Architecture](#-architecture) • [Troubleshooting](#-troubleshooting) • [Learning Paths](#-learning-paths)
 
 ---
 
-## License
-
-This configuration is provided as-is for educational purposes only.
-
-Individual components retain their respective licenses:
-- **DVWA**: GPL-3.0
-- **OWASP Juice Shop**: MIT
-- **Mutillidae II**: GPL-3.0
-- **WebGoat**: LGPL-2.1
-- **bWAPP**: CC BY-NC-ND
+**Lab Version**: `2.0.0` | **Last Updated**: January 2026  
+**Tested On**: VirtualBox 7.0 • Ubuntu 22.04 • Parrot OS 6.1 Security Edition
 
 ---
 
-## Acknowledgments
+<sub>⚠️ **Disclaimer**: This lab contains intentionally vulnerable systems. Use only in isolated, controlled environments. The authors are not responsible for misuse.</sub>
 
-- OWASP Foundation
-- Parrot Security Team
-- Offensive Security community
-- Docker community
-- VulnHub & HackTheBox platforms
-- Security researchers worldwide
+**Made with 💚 by the Cybersecurity Community**
 
----
-
-## Support
-
-For issues or questions:
-- Check Troubleshooting section
-- Review container logs: `docker compose logs`
-- Verify network configuration: `ip a`
-- Search existing GitHub issues
-- Create new issue with full error details
-
-**Lab Version**: 2.0  
-**Last Updated**: January 2026  
-**Tested On**: VirtualBox 7.0, Ubuntu 22.04, Parrot OS 6.1 Security Edition
+</div>
